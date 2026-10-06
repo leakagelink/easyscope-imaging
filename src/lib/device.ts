@@ -74,7 +74,7 @@ type NativeBridge = { isAvailable(): Promise<boolean> };
 function getNativeBridge(): NativeBridge | undefined {
   if (typeof window === "undefined") return undefined;
   const w = window as unknown as { Capacitor?: { Plugins?: Record<string, unknown> } };
-  return w.Capacitor?.Plugins?.EasyScopeDevice as NativeBridge | undefined;
+  return w.Capacitor?.Plugins?.["EasyScopeDevice"] as NativeBridge | undefined;
 }
 
 /** Placeholder for the future native app. Reports unsupported on the web. */

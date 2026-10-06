@@ -92,7 +92,7 @@ export async function uploadFile(file: Blob, folder: string, ext: string, fixedN
   const uid = await requireUid();
   const path = `${uid}/${folder}/${fixedName ?? crypto.randomUUID()}.${ext}`;
   const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
-    contentType: file.type || undefined,
+    ...(file.type ? { contentType: file.type } : {}),
     upsert: !!fixedName,
   });
   if (error) throw error;

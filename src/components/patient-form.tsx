@@ -20,7 +20,7 @@ export function PatientForm({ open, onOpenChange, patient, onSaved }: {
   const qc = useQueryClient();
   const { data: all = [] } = usePatients();
   const [f, setF] = useState({ name: "", age: "", gender: "", phone: "", patient_id: "", date_of_birth: "" });
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Partial<Record<"name" | "age" | "gender" | "phone", string>>>({});
   const [dupWarned, setDupWarned] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -41,7 +41,7 @@ export function PatientForm({ open, onOpenChange, patient, onSaved }: {
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement>) => setF({ ...f, [k]: e.target.value });
 
   async function save() {
-    const e: Record<string, string> = {};
+    const e: Partial<Record<"name" | "age" | "gender" | "phone", string>> = {};
     if (!f.name.trim()) e.name = "Patient name is required";
     const age = Number(f.age);
     if (f.age === "" || !Number.isInteger(age) || age < 0 || age > 150) e.age = "Enter a valid age (0–150)";
@@ -137,7 +137,7 @@ export function PatientForm({ open, onOpenChange, patient, onSaved }: {
   );
 }
 
-function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
+function Field({ label, error, children }: { label: string; error?: string | undefined; children: React.ReactNode }) {
   return (
     <div className="grid gap-1.5">
       <Label>{label}</Label>

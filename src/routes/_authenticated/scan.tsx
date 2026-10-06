@@ -11,7 +11,7 @@ import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/scan")({
-  validateSearch: (s: Record<string, unknown>): { patient?: string } => ({ patient: typeof s.patient === "string" ? s.patient : undefined }),
+  validateSearch: (s: Record<string, unknown>): { patient?: string | undefined } => (typeof s["patient"] === "string" ? { patient: s["patient"] } : {}),
   head: () => ({
     meta: [
       { title: "Device / Scan — EasyScope" },
@@ -92,7 +92,7 @@ function ScanPage() {
   function switchCam() {
     if (inputs.length < 2) return;
     const idx = inputs.findIndex((i) => i.id === inputId);
-    start(inputs[(idx + 1) % inputs.length].id);
+    start(inputs[(idx + 1) % inputs.length]!.id);
   }
   function toggleFreeze() {
     const v = videoRef.current;
@@ -140,7 +140,7 @@ function ScanPage() {
       {live && !shot && caps.zoom && zoom !== null && (
         <div className="mx-6 mt-3 flex items-center gap-3 text-xs">
           Zoom
-          <Slider min={caps.zoom.min} max={caps.zoom.max} step={caps.zoom.step || 0.1} value={[zoom]} onValueChange={([z]) => { setZoomV(z); if (track) setZoom(track, z); }} />
+          <Slider min={caps.zoom.min} max={caps.zoom.max} step={caps.zoom.step || 0.1} value={[zoom]} onValueChange={([z]) => { if (z === undefined) return; setZoomV(z); if (track) setZoom(track, z); }} />
         </div>
       )}
 

@@ -144,7 +144,7 @@ function ImageSlot({ label, path, onChange }: { label: string; path: string | nu
   async function pick(f?: File) {
     if (!f) return;
     const err = validateImage(f);
-    if (err) return toast.error(err);
+    if (err) { toast.error(err); return; }
     setBusy(true);
     try { onChange(await uploadFile(f, "branding", extFor(f.type))); } catch (e) { toast.error((e as Error).message); } finally { setBusy(false); }
   }
@@ -171,11 +171,11 @@ function LocationDialog({ value, clinicId, onClose }: { value: ClinicLocation | 
     if (value) setF(value === "new" ? { location_name: "", address: "", phone: "" } : { location_name: value.location_name, address: value.address, phone: value.phone });
   }, [value]);
   async function save() {
-    if (!f.location_name.trim()) return toast.error("Clinic name is required");
+    if (!f.location_name.trim()) { toast.error("Clinic name is required"); return; }
     const r = value === "new"
       ? await supabase.from("clinic_locations").insert({ ...f, clinic_id: clinicId, doctor_id: await requireUid() })
       : await supabase.from("clinic_locations").update(f).eq("id", (value as ClinicLocation).id);
-    if (r.error) return toast.error(r.error.message);
+    if (r.error) { toast.error(r.error.message); return; }
     await qc.invalidateQueries({ queryKey: qk.locations });
     onClose();
   }

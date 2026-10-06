@@ -166,7 +166,7 @@ export async function buildReportPdf(b: ReportBundle): Promise<Blob> {
     for (let i = 0; i < imgs.length; i += cols) {
       ensure(cellH + 8);
       for (let c = 0; c < cols && i + c < imgs.length; c++) {
-        const im = imgs[i + c];
+        const im = imgs[i + c]!;
         const r = Math.min(cellW / im.w, cellH / im.h);
         const w = im.w * r, h = im.h * r;
         const x = M + c * (cellW + gap) + (cellW - w) / 2;
