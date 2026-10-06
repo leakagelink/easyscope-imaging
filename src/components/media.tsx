@@ -15,12 +15,12 @@ export function SignedImage({ path, className, alt = "Clinical photograph" }: { 
 
 export type ViewerItem = {
   id: string;
-  path?: string;
-  src?: string;
-  title?: string;
-  subtitle?: string;
-  patientId?: string;
-  reportId?: string | null;
+  path?: string | undefined;
+  src?: string | undefined;
+  title?: string | undefined;
+  subtitle?: string | undefined;
+  patientId?: string | undefined;
+  reportId?: string | null | undefined;
 };
 
 function ViewerImage({ item }: { item: ViewerItem }) {

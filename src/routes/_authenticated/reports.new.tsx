@@ -18,11 +18,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-type Search = { patient?: string; edit?: string };
+type Search = { patient?: string | undefined; edit?: string | undefined };
 export const Route = createFileRoute("/_authenticated/reports/new")({
   validateSearch: (s: Record<string, unknown>): Search => ({
-    patient: typeof s.patient === "string" ? s.patient : undefined,
-    edit: typeof s.edit === "string" ? s.edit : undefined,
+    ...(typeof s["patient"] === "string" ? { patient: s["patient"] } : {}),
+    ...(typeof s["edit"] === "string" ? { edit: s["edit"] } : {}),
   }),
   head: () => ({
     meta: [
@@ -101,12 +101,12 @@ function ReportEditor() {
     const n = [...it];
     const j = i + d;
     if (j < 0 || j >= n.length) return it;
-    [n[i], n[j]] = [n[j], n[i]];
+    [n[i], n[j]] = [n[j]!, n[i]!];
     return n;
   });
-  const makeCover = (i: number) => setItems((it) => [it[i], ...it.filter((_, k) => k !== i)]);
+  const makeCover = (i: number) => setItems((it) => [it[i]!, ...it.filter((_, k) => k !== i)]);
   const remove = (i: number) => setItems((it) => {
-    const x = it[i];
+    const x = it[i]!;
     if (x.kind === "existing") setRemoved((r) => [...r, x.media]);
     return it.filter((_, k) => k !== i);
   });
@@ -141,7 +141,7 @@ function ReportEditor() {
         await supabase.from("clinical_media").delete().in("id", removed.map((m) => m.id));
       }
       for (let i = 0; i < items.length; i++) {
-        const it = items[i];
+        const it = items[i]!;
         if (it.kind === "existing") {
           await supabase.from("clinical_media").update({ sort_order: i }).eq("id", it.media.id);
         } else {
@@ -249,7 +249,7 @@ function ReportEditor() {
       <PatientPicker open={picker} onOpenChange={setPicker} patients={patients} onPick={(p) => { setPatientId(p.id); setPicker(false); }} onNew={() => { setPicker(false); setNewPatient(true); }} />
       <PatientForm open={newPatient} onOpenChange={setNewPatient} onSaved={(p) => setPatientId(p.id)} />
       <Viewer
-        items={items.map((it) => ({ id: it.key, src: it.kind === "new" ? it.url : undefined, path: it.kind === "existing" ? it.media.file_url : undefined, title: patient?.name, subtitle: undefined }))}
+        items={items.map((it) => ({ id: it.key, src: it.kind === "new" ? it.url : undefined, path: it.kind === "existing" ? it.media.file_url : undefined, title: patient?.name ?? "" }))}
         index={view} onIndex={setView} onClose={() => setView(null)}
       />
     </div>
