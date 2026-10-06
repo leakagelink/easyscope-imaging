@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedGalleryRouteImport } from './routes/_authenticated/gallery'
 import { Route as AuthenticatedScanRouteImport } from './routes/_authenticated/scan'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedPatientsIndexRouteImport } from './routes/_authenticated/patients.index'
 import { Route as AuthenticatedPatientsIdRouteImport } from './routes/_authenticated/patients.$id'
 import { Route as AuthenticatedReportsIndexRouteImport } from './routes/_authenticated/reports.index'
@@ -48,6 +49,11 @@ const AuthenticatedGalleryRoute = AuthenticatedGalleryRouteImport.update({
 const AuthenticatedScanRoute = AuthenticatedScanRouteImport.update({
   id: '/scan',
   path: '/scan',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedPatientsIndexRoute =
@@ -84,6 +90,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/gallery': typeof AuthenticatedGalleryRoute
   '/scan': typeof AuthenticatedScanRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/patients/$id': typeof AuthenticatedPatientsIdRoute
   '/reports/$id': typeof AuthenticatedReportsIdRoute
   '/reports/new': typeof AuthenticatedReportsNewRoute
@@ -96,6 +103,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/gallery': typeof AuthenticatedGalleryRoute
   '/scan': typeof AuthenticatedScanRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/patients/$id': typeof AuthenticatedPatientsIdRoute
   '/reports/$id': typeof AuthenticatedReportsIdRoute
   '/reports/new': typeof AuthenticatedReportsNewRoute
@@ -110,6 +118,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/gallery': typeof AuthenticatedGalleryRoute
   '/_authenticated/scan': typeof AuthenticatedScanRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/patients/$id': typeof AuthenticatedPatientsIdRoute
   '/_authenticated/reports/$id': typeof AuthenticatedReportsIdRoute
   '/_authenticated/reports/new': typeof AuthenticatedReportsNewRoute
@@ -124,6 +133,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/gallery'
     | '/scan'
+    | '/settings'
     | '/patients/$id'
     | '/reports/$id'
     | '/reports/new'
@@ -136,6 +146,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/gallery'
     | '/scan'
+    | '/settings'
     | '/patients/$id'
     | '/reports/$id'
     | '/reports/new'
@@ -149,6 +160,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/gallery'
     | '/_authenticated/scan'
+    | '/_authenticated/settings'
     | '/_authenticated/patients/$id'
     | '/_authenticated/reports/$id'
     | '/_authenticated/reports/new'
@@ -206,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedScanRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/patients/': {
       id: '/_authenticated/patients/'
       path: '/patients'
@@ -248,6 +267,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedGalleryRoute: typeof AuthenticatedGalleryRoute
   AuthenticatedScanRoute: typeof AuthenticatedScanRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedPatientsIdRoute: typeof AuthenticatedPatientsIdRoute
   AuthenticatedReportsIdRoute: typeof AuthenticatedReportsIdRoute
   AuthenticatedReportsNewRoute: typeof AuthenticatedReportsNewRoute
@@ -259,6 +279,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedGalleryRoute: AuthenticatedGalleryRoute,
   AuthenticatedScanRoute: AuthenticatedScanRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedPatientsIdRoute: AuthenticatedPatientsIdRoute,
   AuthenticatedReportsIdRoute: AuthenticatedReportsIdRoute,
   AuthenticatedReportsNewRoute: AuthenticatedReportsNewRoute,
